@@ -11,3 +11,9 @@ e = FieldElement(2,13)
 f = FieldElement(5,13)
 
 print( d - e == f )
+
+aa = FieldElement(3,13)
+bb = FieldElement(12,13)
+cc = FieldElement(10,13) 
+
+print ( aa * bb == cc )

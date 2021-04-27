@@ -17,3 +17,8 @@ bb = FieldElement(12,13)
 cc = FieldElement(10,13) 
 
 print ( aa * bb == cc )
+
+dd = FieldElement(3, 13)
+ee = FieldElement(1, 13)
+
+print ( dd ** 3 == ee)

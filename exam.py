@@ -1,4 +1,4 @@
-from FieldElement import FieldElement
+from ecc import FieldElement
 
 a = FieldElement(7,13)
 b = FieldElement(12,13)

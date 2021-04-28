@@ -1,4 +1,5 @@
 from ecc import FieldElement
+from ecc import Point
 
 a = FieldElement(7,13)
 b = FieldElement(12,13)
@@ -27,5 +28,9 @@ aaa = FieldElement(3,31)
 bbb = FieldElement(24,31)
 ccc = FieldElement(4, 31)
 
-
 print ( "5",aaa/bbb == ccc )
+
+p1 = Point(2, 4, 5, 7)
+p2 = Point(-1, -1, 5, 7)
+
+

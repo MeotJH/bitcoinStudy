@@ -88,16 +88,22 @@ class Point:
     #         return self.__class__(None,None,self.a,self.b)
 
     #x1 = x2인 점 덧셈 __add__
-    # def __add__(self, other):
+    def __add__(self, other):
         
-    #     if self.a != other.a or self.b != other.b:
-    #         raise TypeError('포인트 {},{}는 같은 커브에 있지 않다.'.format(self,other))
+        if self.a != other.a or self.b != other.b:
+            raise TypeError('포인트 {},{}는 같은 커브에 있지 않다.'.format(self,other))
 
-    #     if self.x is None:
-    #         return other
-    #     if other.x is None:
-    #         return self
+        if self.x is None:
+            return other
+        if other.x is None:
+            return self
 
-    #     if self.x == other.x and self.y != other.y:
-    #         return self.__class__(None,None,self.a,self.b)
+        if self.x == other.x and self.y != other.y:
+            return self.__class__(None,None,self.a,self.b)
+
+        if self.x != other.x:
+            inclination = (other.y - self.y )/( other.x - self.x)
+            x = inclination**2 - self.x - other.x
+            y = inclination*(self.x - x ) - self.y
+            return self.__class__( x, y, self.a, self.b)
 

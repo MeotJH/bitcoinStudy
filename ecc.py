@@ -109,5 +109,10 @@ class Point:
 
         if self.x == other.x:
             inclination = (3*(self.x**2)+self.a)/(2*self.y)
-            
+            print(inclination)
+            x = inclination**2 - 2*self.x
+            y = inclination*(self.x - x) - self.y
+
+            return self.__class__( x, y, self.a, self.b)
+
 

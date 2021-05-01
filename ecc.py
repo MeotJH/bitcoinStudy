@@ -102,17 +102,21 @@ class Point:
             return self.__class__(None,None,self.a,self.b)
 
         if self.x != other.x:
+            
             inclination = (other.y - self.y )/( other.x - self.x)
             x = inclination**2 - self.x - other.x
             y = inclination*(self.x - x ) - self.y
             return self.__class__( x, y, self.a, self.b)
 
         if self.x == other.x:
+
             inclination = (3*(self.x**2)+self.a)/(2*self.y)
             print(inclination)
             x = inclination**2 - 2*self.x
             y = inclination*(self.x - x) - self.y
-
             return self.__class__( x, y, self.a, self.b)
+
+        if self == other and self.y == 0 * self.x:
+            return self.__class__(None, None, self.a, self.b)
 
 

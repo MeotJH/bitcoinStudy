@@ -1,15 +1,10 @@
-from ecc import Point
+from ecc import Point, FieldElement
 
+a = FieldElement(num=0, prime=223)
+b = FieldElement(num=7, prime=223)
+x = FieldElement(num=192, prime=223)
+y = FieldElement(num=105, prime=223)
 
+p1 = Point (x,y,a,b)
+print(p1)
 
-# p1 = Point(-1, 1, 5, 7)
-# p2 = Point(-1, -1, 5, 7)
-# p3 = Point(None, None, 5, 7)
-
-# print(p1+p2)
-
-
-p1 = Point(-1, -1, 5, 7)
-p2 = Point(-1, -1, 5, 7)
-
-print(p1 + p2)

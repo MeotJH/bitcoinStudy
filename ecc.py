@@ -18,8 +18,7 @@ class FieldElement:
         return self.num == other.num and self.prime == other.prime
 
     def __ne__(self, other):
-        # this should be the inverse of the == operator
-        raise NotImplementedError
+        return not (self == other)
 
     def __add__(self, other):
         if self.prime != other.prime:
@@ -70,24 +69,12 @@ class Point:
     def __repr__(self):
         if self.x is None:
             return 'Point(infinity)'
+        elif isinstance(self.x, FieldElement):
+            return 'Point({},{})_{}_{} FieldElement({})'.format(
+                self.x.num, self.y.num, self.a.num, self.b.num, self.x.prime)
         else:
             return 'Point({},{})_{}_{}'.format(self.x, self.y, self.a, self.b)
 
-    # def __add__(self,other):
-
-    #     if self.a != other.a or self.b != other.b:
-    #         raise TypeError('Point {},{} are not on the same curve'.format(self,other))
-
-    #     if self.x is None:
-    #         return other
-        
-    #     if other.x is None:
-    #         return self
-
-    #     if self.x == other.x and self.y != other.y:
-    #         return self.__class__(None,None,self.a,self.b)
-
-    #x1 = x2인 점 덧셈 __add__
     def __add__(self, other):
         
         if self.a != other.a or self.b != other.b:
@@ -118,5 +105,23 @@ class Point:
 
         if self == other and self.y == 0 * self.x:
             return self.__class__(None, None, self.a, self.b)
+
+# class ECCTest(TestCase):
+
+#     def test_on_curve(self):
+#         prime = 223
+#         a = FieldElement(0, prime)
+#         b = FieldElement(7, prime)
+#         vaild_points = ((192, 105), (17,56), (1,193))
+#         invalid_points = ((200,119), (42,99))
+#         for x_raw, y_raw in vaild_points:
+#             x = FieldElement(x_raw, prime)
+#             y = FieldElement(y_raw, prime)
+#             Point(x, y, a, b)
+#         for x_raw, y_raw in invailid_points:
+#             x = FieldElement(x_raw, prime)
+#             y = FieldElement(y_raw, prime)
+#             with self.assertRaises(ValueError):
+#                 Point(x, y, a, b)
 
 

@@ -145,7 +145,9 @@ B = 7
 P = 2**256 - 2**32 - 977
 # end::source4[]
 # tag::source9[]
-N = 0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141
+# 군의 위수 여기에 G값을 곱하면 infinity가 나오기 때문에 군의 위수인지 알 수 있다.
+# P는 유한체의 위수이고 N은 우리가 사용할 생성점 G(x,y)군의 위수이기 때문에 상수임 
+N = 0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141 # 군의 위수 여기에 
 # end::source9[]
 
 class S256Field(FieldElement):
@@ -174,6 +176,23 @@ class S256Point(Point):
         coef = coefficient % N
         return super().__rmul__(coef)
 
+    def verify(self, z, sig):
+        s_inv = pow(sig , N - 2, N)
+        u = z * s_inv % N
+        v = sig.r * s_inv % N
+        total = u * G + v * self
+        return total.x.num == sig.r
+
+#생성점 G의 값은 상수이기 때문에 미리 정해놓는것
+#이 생성점을 토대로 스칼라 덧셈을 하면 ( eG = P ) P점 (x,y)로부터 e가 얼마인지 역산하기 매우 어렵기 때문에 암호문으로 쓰이는것  
 G = S256Point(
     0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798,
     0x483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8)
+
+class Signature:
+    def __init__(self, r, s):
+        self.r = r
+        self.s = s
+
+    def __repr__(self):
+        return 'Signature({:x},{:x})'.format(self.r,self.s)

@@ -184,6 +184,10 @@ class S256Point(Point):
         v = sig.r * s_inv % N
         total = u * G + v * self
         return total.x.num == sig.r
+    
+    def sec(self):
+        #returns the binary version for the SEC format
+        return b'\x04'+self.x.num.to_bytes(32,'big')+self.y.num.to_bytes(32,'big')
 
 #생성점 G의 값은 상수이기 때문에 미리 정해놓는것
 #이 생성점을 토대로 스칼라 덧셈을 하면 ( eG = P ) P점 (x,y)로부터 e가 얼마인지 역산하기 매우 어렵기 때문에 암호문으로 쓰이는것  

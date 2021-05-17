@@ -1,4 +1,5 @@
 from random import randint
+from helper import hash160, encode_base58_checksum
 
 class FieldElement:
 
@@ -199,6 +200,18 @@ class S256Point(Point):
     def sqrt(self):
         return self**((p+1) // 4)
 
+    def hash160(self, compressed=True):
+        return hash160(self.sec(compressed))
+
+    def address(self, compressed=True, testnet=False):
+        '''Returns the address string'''
+        h160 = self.hash160(compressed)
+        if testnet:
+            prefix = b'\x6f'
+        else:
+            prefix = b'\x00'
+        return encode_base58_checksum(prefix + h160)
+
     @classmethod
     def parse(self, sec_bin):
         '''returns a Point object from a SEC binary (not hex)'''
@@ -237,11 +250,28 @@ class Signature:
     def __repr__(self):
         return 'Signature({:x},{:x})'.format(self.r,self.s)
 
+    def der(self):
+        rbin = self.r.to_bytes(32, byteorder='big')
+        # remove all null bytes at the beginning
+        rbin = rbin.lstrip(b'\x00')
+        # if rbin has a high bit, add a \x00
+        if rbin[0] & 0x80:
+            rbin = b'\x00' + rbin
+        result = bytes([2, len(rbin)]) + rbin  # <1>
+        sbin = self.s.to_bytes(32, byteorder='big')
+        # remove all null bytes at the beginning
+        sbin = sbin.lstrip(b'\x00')
+        # if sbin has a high bit, add a \x00
+        if sbin[0] & 0x80:
+            sbin = b'\x00' + sbin
+        result += bytes([2, len(sbin)]) + sbin
+        return bytes([0x30, len(result)]) + result
+
 class PrivateKey:
 
     def __init__(self, secret):
         self.secret = secret
-        self.point = secret * G
+        self.point = secret * G # 여기있는 G가 이미 s256point 클래스의 의 생성점 x와y를 말하고 있으니 s256point클래스를 쓸 수 있는것.
 
     def hex(self):
         return '{:x}'.format(self.secret).zfill(64)
@@ -274,3 +304,17 @@ class PrivateKey:
                 return candidate  # <2>
             k = hmac.new(k, v + b'\x00', s256).digest()
             v = hmac.new(k, v, s256).digest()
+
+    def wif(self, compressed=True, testnet = False):
+        secret_bytes = self.secret.to_bytes(32, 'big')
+        if testnet:
+            prefix = b'\xef'
+        else:
+            prefix = b'\x80'
+
+        if compressed:
+            suffix = b'\x01'
+        else:
+            suffix = b''
+
+        return encode_base58_checksum(prefix + secret_bytes + suffix)

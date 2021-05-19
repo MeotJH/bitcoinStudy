@@ -344,10 +344,16 @@ class Tx:
             self.locktime,
         )
     def id(self):
-        ''Human-readable hexadecimal of the transaction hash''
+        '''Human-readable hexadecimal of the transaction hash'''
         return self.hash().hex()
 
     def hash(self):
         '''Bianry hash of the lagacy serializationn'''
         return hash256(self.serialize())[::-1]
+
+    @classmethod
+    def parse(cls, stream):
+        version = helper.little_endian_to_int(stream.read(4))
+        return cls(version, None, None, None, testnet=testnet)
+
 

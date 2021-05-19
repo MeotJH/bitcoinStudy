@@ -42,6 +42,14 @@ import helper
 # key1 = key1.point.address(compressed=False, testnet=True)
 # print(key1)
 
-key1 = 5003
-key1 = ecc.PrivateKey(key1).wif(compressed=True, testnet=True)
-print(key1)
+#4.6
+# key1 = 5003
+# key1 = ecc.PrivateKey(key1).wif(compressed=True, testnet=True)
+# print(key1)
+
+#4.9
+# bytekey = b'kinjinhanisZZangAndBecomeAKingOfProgramming'#바이트로 된 문자를 인트로 바꾸는 함수 활용해서 비밀키로 만들기위한 전작업
+# intkey = helper.little_endian_to_int(bytekey)#바이트 -> 인트
+# mykey = ecc.PrivateKey(intkey) # 이러면 이제 256으로 공개된 값을 스칼라곱셈을 해서 공개키가 만들어진다
+# print(mykey.point.address(compressed=True, testnet=True))
+

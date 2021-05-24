@@ -354,8 +354,11 @@ class Tx:
     @classmethod
     def parse(cls, stream):
         version = helper.little_endian_to_int(stream.read(4))
-        TxIn = 
-        return cls(version, None, None, None, testnet=testnet)
+        num_inputs = read_varint(s)
+        inputs = []
+        for _ in range(num_inputs):
+            inputs.append(TxIn.parse(s))
+        return cls(version, inputs, None, None, testnet=testnet)
 
 class TxIn:
     def __init__(self, prev_tx, prev_index, script_sig=None, sequence=0xffffffff):
